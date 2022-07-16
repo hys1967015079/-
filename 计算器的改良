@@ -1,0 +1,73 @@
+package main
+
+import (
+	"fmt"
+	"strings"
+)
+
+func  main()  {
+	var equation string
+	fmt.Println(solveEquation(equation))
+}
+
+func parse(eq string, start, end int) (coeff int, number int) {
+	i := start
+	minus := false
+	for i < end {
+		x := false
+		num := 0
+		has_num := false
+		next_minus := false
+		for ; i < end; i++ {
+			if eq[i] == '+' || eq[i] == '-' {
+				next_minus = (eq[i] == '-')
+				i++
+				break
+			}
+			if eq[i] == 'x' {
+				x = true
+				continue
+			}
+			has_num = true
+			num = num * 10 + int(eq[i] - '0')
+		}
+
+		if x {
+			if !has_num {
+				num = 1
+			}
+			if minus {
+				coeff -= num
+			} else {
+				coeff += num
+			}
+		} else {
+			if minus {
+				number -= num
+			} else {
+				number += num
+			}
+		}
+
+		minus = next_minus
+	}
+
+	return coeff, number
+}
+
+func solveEquation(equation string) string {
+	sep := strings.Index(equation, "=")
+	c1, n1 := parse(equation, 0, sep)
+	c2, n2 := parse(equation, sep + 1, len(equation))
+	if c1 == c2 {
+		if n1 == n2 {
+			return "Infinite solutions"
+		} else {
+			return "No solution"
+		}
+	}
+	if (n2 - n1) % (c1 - c2) == 0 {
+		return fmt.Sprintf("x=%d", (n2 - n1) / (c1 - c2))
+	}
+	return ""
+}

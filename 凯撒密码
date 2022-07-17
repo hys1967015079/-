@@ -1,0 +1,22 @@
+package main
+
+import (
+	"fmt"
+)
+
+func main(){
+	var(
+		n , i , j int
+		s string
+	)
+	fmt.Scan(&n , &s)
+	for i = 1 ; i < len(s); i++{
+		for j = 2 ; j <= len(s); j++{
+			 s[i]++
+			if s[i] > 122 {
+				s[i] = s[i]%122 + 96
+			}
+		}
+	}
+	print(s)
+}

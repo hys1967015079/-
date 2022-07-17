@@ -1,0 +1,103 @@
+package main
+
+import (
+	"fmt"
+)
+
+func main(){
+	var(
+	mp [11][11]byte
+	cx, cy, fx, fy int//牛和f的位置
+	dc, df int //行动方向
+	ans int //所需的时间
+	)
+	//输入地图
+    for i:= 0 ; i < 10 ; i++{
+    	for j:= 0 ; j < 10 ; j++{
+    		fmt.Scan(mp[i][j])
+		}
+	}
+    //记录牛和f的初始位置
+	for i:= 0 ; i < 10 ; i++{
+		for j:= 0 ; j < 10 ; j++{
+			if mp[i][j]=='C' {
+				cx=i
+				cy=j
+			}
+			if mp[i][j]=='F' {
+				fx=i
+				fy=j
+			}
+		}
+	}
+	//记录两头牛和Farmer John的初始位置
+	//1朝北，2朝东，3朝南，4朝西
+	dc=1
+	df=1
+	//移动并计算时间，直到两头牛相遇或是永不相遇
+	for (cx!=fx||cy!=fy) && ans <= 10000{
+		//两头牛移动方式及条件判断
+		switch dc{
+		case 1:
+			if cx-1<0||mp[cx-1][cy]=='*' {
+				dc = 2
+			}else{
+				cx-=1
+			}
+		case 2:
+			if cy+1>=10||mp[cx][cy+1]=='*' {
+				dc = 3
+			}else {
+				cy += 1
+			}
+		case 3:
+			if cx+1>=10||mp[cx+1][cy]=='*' {
+				dc = 4
+			}else{
+				cx+=1
+			}
+		case 4:
+			if cy-1<0||mp[cx][cy-1]=='*' {
+				dc = 1
+			}else {
+				cy -= 1
+			}
+		}
+
+		//farmer 同理
+		switch df{
+		case 1:
+			if fx-1<0||mp[fx-1][fy]=='*' {
+				df = 2
+			}else {
+				fx -= 1
+			}
+		case 2:
+			if fy+1>=10||mp[fx][fy+1]=='*' {
+				df = 3
+			}else {
+				fy += 1
+			}
+		case 3:
+			if fx+1>=10||mp[fx+1][fy]=='*' {
+				df = 4
+			}else {
+				fx += 1
+			}
+		case 4:
+			if fy-1<0||mp[fx][fy-1]=='*' {
+				df = 1
+			}else {
+				fy -= 1
+			}
+		}
+
+		ans++ //每次移动加一分钟
+	}
+
+	if ans > 10000{
+		fmt.Printf("%d" , 0)
+	}else{
+		fmt.Printf("%d" , ans)
+	}
+}

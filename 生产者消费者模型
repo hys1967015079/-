@@ -1,0 +1,28 @@
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+//生成整数倍的序列
+func Productor(factor int, out chan<- int){
+	for i:= 0 ; i < 1000 ; i++{
+		out <- i * factor
+	}
+}
+
+func Consumer(in <-chan int){
+	for v := range in{
+		fmt.Println(v)
+	}
+}
+
+func main(){
+	ch := make(chan int , 64)
+	go Productor(3, ch)//生成3的倍数
+	go Productor(5, ch)//生成5的倍数
+	go Consumer(ch)
+
+	time.Sleep(3 * time.Second)//休眠5秒后关闭
+}
